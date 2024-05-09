@@ -13,3 +13,13 @@ $f3->route('GET /', function() {
     $view = new Template();
     echo $view->render('views/home.html');
 });
+
+
+// Log-in
+$f3->route('GET /views/login', function() {
+    //echo '<h1>My Breakfast Menu</h1>';
+
+    // Render a view page
+    $view = new Template();
+    echo $view->render('views/login.html');
+});
