@@ -1,0 +1,14 @@
+
+{
+  "name" : "dpjprogr/328/application",
+  "authors" : [
+    {
+      "name" : "David Jarvis",
+      "email" : "jarvis.david.2@student.greenriver.edu"
+    }
+  ],
+  "require" :
+  {
+    "bcosca/fatfree-core" : "dev-master"
+  }
+}
