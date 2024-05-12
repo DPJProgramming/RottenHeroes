@@ -1,14 +1,20 @@
-
 {
-  "name" : "dpjprogr/328/RottenHeroes",
-  "authors" : [
+  "name": "dpjprogr/328/RottenHeroes",
+  "authors": [
     {
-      "name" : "David Jarvis",
-      "email" : "jarvis.david.2@student.greenriver.edu"
+      "name": "Andrew Hiskins",
+      "email": "Hinkson.Andrew@student.greenriver.edu"
+    },
+    {
+      "name": "Colton Matthews",
+      "email": "cmatthews4278@gmail.com"
+    },
+    {
+      "name": "David Jarvis",
+      "email": "Jarvis.David.2@student.greenriver.edu"
     }
   ],
-  "require" :
-  {
-    "bcosca/fatfree-core" : "dev-master"
+  "require": {
+    "bcosca/fatfree-core": "dev-master"
   }
 }
