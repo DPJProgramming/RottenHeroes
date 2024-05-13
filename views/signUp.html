@@ -1,0 +1,44 @@
+<include href="views/header.html"></include>
+<!-- Sign Up Form -->
+<div class="container-fluid d-flex justify-content-center">
+    <div class="row">
+        <header class="col text-center">
+            <h1>Sign Up</h1>
+        </header>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <form class="form-container pt-0 col-lg-4 col-md-6 col-sm-8" id="signUp" method="POST" action="signUp.html">
+        <!-- Name -->
+        <div class="form-group">
+            <label for="name">Name*</label>
+            <input type="text" class="form-control" id="name" name="name" maxlength="100" minlength="1" aria-describedby="nameHelp" placeholder="Enter name" required>
+            <small id="nameHelp" class="form-text text-muted"></small>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email address*</label><span class="text-danger" id="email-error"></span>
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+            <small id="emailHelp" class="form-text text-muted"></small>
+        </div>
+
+        <!-- Superhero Name -->
+        <div class="form-group">
+            <label for="superhero">Favorite Superhero*</label>
+            <input type="text" class="form-control" id="superhero" name="superhero" maxlength="100" minlength="1" placeholder="Enter superhero name" required>
+        </div>
+
+        <!-- Comments -->
+        <div class="form-group">
+            <label for="aboutMe">About me*</label>
+            <textarea class="form-control" name="aboutMe" id="aboutMe" rows="4" placeholder="Share your thoughts" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
