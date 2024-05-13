@@ -30,7 +30,7 @@ $f3->route('GET|POST /signup', function($f3) {
     }
 });
 
-$f3->route('GET /hero/@name', function($f3, $params) {
+$f3->route('GET /hero', function($f3, $params) {
     $view = new Template();
     echo $view->render('views/hero.html');
 });
