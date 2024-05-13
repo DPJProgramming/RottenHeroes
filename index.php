@@ -35,5 +35,9 @@ $f3->route('GET /hero', function($f3, $params) {
     echo $view->render('views/hero.html');
 });
 
+$f3->route('GET /home', function($f3) {
+    $view = new Template();
+    echo $view->render('views/home.html');
+});
 
 $f3->run();
