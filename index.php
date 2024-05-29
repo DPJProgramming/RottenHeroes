@@ -22,6 +22,14 @@ $f3->route('GET|POST /login', function($f3) {
     }
 });
 
+$f3->route('GET /favorites', function() {
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    } else {
+        $GLOBALS['con']->favorites();
+    }
+});
+
+
 $f3->route('GET|POST /signup', function($f3) {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } else {

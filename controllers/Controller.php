@@ -32,4 +32,10 @@ class Controller
         $view = new Template();
         echo $view->render('views/signUp.html');
     }
+
+    function favorites()
+    {
+        $view = new Template();
+        echo $view->render('views/favorites.html');
+    }
 }
