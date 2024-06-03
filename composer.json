@@ -1,5 +1,5 @@
 {
-  "name": "dpjprogr/328/RottenHeroes",
+  "name": "328/RottenHeroes",
   "authors": [
     {
       "name": "Andrew Hiskins",
@@ -14,11 +14,12 @@
       "email": "Jarvis.David.2@student.greenriver.edu"
     }
   ],
-  "require": {
-    "bcosca/fatfree-core": "dev-master"
+  "autoload": {
+    "classmap": [
+      "classes/"
+    ]
   },
-  "autoload":
-  {
-    "classmap": ["classes/", "model/", "controllers/"]
+  "require": {
+    "bcosca/fatfree": "^3.8"
   }
 }

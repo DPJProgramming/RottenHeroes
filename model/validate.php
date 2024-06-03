@@ -22,7 +22,7 @@ class Validator
         return null;
     }
 
-    public static function validateComment($comment)
+    public static function validateComment($comment) //will add more later for this CM
     {
         if (empty($comment)) {
             return 'Comment is required';
@@ -32,4 +32,6 @@ class Validator
         return null;
     }
 }
+
+
 ?>

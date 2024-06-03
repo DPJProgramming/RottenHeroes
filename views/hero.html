@@ -1,15 +1,17 @@
-<include href="views/header.html" xmlns="http://www.w3.org/1999/html"></include>
+<include href="views/header.html"></include>
 <div class="container">
     <div class="row">
         <div class="col-6 bg-light border">
-            <h2>Homelander</h2>
-            <img src="img/homelander.jpg" alt="Homelander">
+            <h2>{{ @hero.name }}</h2>
+            <img src="img/{{ @hero.image }}" alt="{{ @hero.name }}">
             <p>
-                Homelander is a powerful superhero with a public persona of a noble and patriotic protector. However, his true personality is ruthless and power-hungry.<br>
-                38% rating<br>
-                Height: 6'<br>
-                Powers: super strength, laser eyes, flight<br>
-                Known weaknesses: vanity
+                {{ @hero.description }}<br>
+                Rating: {{ @hero.rating }}<br>
+                Strength: {{ @hero.strength }}<br>
+                Intellect: {{ @hero.intellect }}<br>
+                Energy: {{ @hero.energy }}<br>
+                Speed: {{ @hero.speed }}<br>
+                Powers: {{ @hero.powers ? implode(', ', @hero.powers) : 'None' }}<br>
             </p>
         </div>
         <div class="col-6 bg-light border">
@@ -36,27 +38,15 @@
         <div class="col-6 bg-light border">
             <h5>Comments and Reviews</h5>
             <div id="comments" class="mt-4">
-                <div class="comment mb-3">
-                    <h4>Username1 <small>2024-10-15</small></h4>
-                    <p>Great hero! Really inspiring.</p>
-                    <hr>
-                </div>
-                <div class="comment mb-3">
-                    <h4>Username2 <small>2024-12-02</small></h4>
-                    <p>Not a fan of this one.</p>
-                    <hr>
-                </div>
-
-                <!-- Repeat group for dynamic comments -->
                 <repeat group="{{ @comments }}" value="{{ @comment }}">
-                    <div class="comment mb-2">
+                    <div class="comment mb-3">
                         <h4>{{ @comment.username }} <small>{{ @comment.created_at }}</small></h4>
-                        <p>{{ @comment.comment }}</p>
+                        <p>{{ @comment.body }}</p>
                         <hr>
                     </div>
                 </repeat>
             </div>
-            <form method="post" action="/submit-comment">
+            <form method="post" action="/328/RottenHeroes/submit-comment">
                 <input type="hidden" name="hero_id" value="{{ @heroId }}">
                 <div class="mb-3">
                     <label for="comment" class="form-label">Comment:</label>
