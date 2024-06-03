@@ -43,8 +43,7 @@ class Controller
         $hero['intellect'] = $hero['intellect'] ?? 'Unknown';
         $hero['energy'] = $hero['energy'] ?? 'Unknown';
         $hero['speed'] = $hero['speed'] ?? 'Unknown';
-        $hero['powers'] = $hero['powers'] ?? [];
-
+        $hero['powers'] = isset($hero['powers']) ? json_decode($hero['powers'], true) : [];
         // Set variables for the template
         $this->_f3->set('hero', $hero);
         $this->_f3->set('comments', $comments);
