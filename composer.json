@@ -16,7 +16,7 @@
   ],
   "autoload": {
     "classmap": [
-      "classes/"
+      "classes/","model/", "controllers/"
     ]
   },
   "require": {

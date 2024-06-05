@@ -11,7 +11,7 @@
                 Intellect: {{ @hero.intellect }}<br>
                 Energy: {{ @hero.energy }}<br>
                 Speed: {{ @hero.speed }}<br>
-                Powers: {{ @hero.powers ? implode(', ', @hero.powers) : 'None' }}<br>
+                Powers: {{ @hero.powers }}<br>
             </p>
         </div>
         <div class="col-6 bg-light border">
@@ -28,12 +28,15 @@
         </div>
         <div class="col-6 bg-light border">
             <h2>Blog</h2>
-            <p>
-                10-16-24: Little boy alive thanks to me<hr>
-            Today, I had the honor of saving a young boy who fell into a river. It's moments like these that remind me why I do what I do.<br>
-            12-2-24: These terrorists coming after me won't be allowed to continue...<br>
-            The threats we face are real, but I promise to stand strong and protect our city from any danger. No one can challenge our safety.<hr>
-            </p>
+            <div id="blog" class="mt-4">
+                <repeat group="{{ @blog }}" value="{{ @blog }}">
+                    <div class="comment mb-3">
+                        <h4>{{ @blog.userName }} <small>{{ @blog.created_at }}</small></h4>
+                        <p>{{ @blog.body }}</p>
+                        <hr>
+                    </div>
+                </repeat>
+            </div>
         </div>
         <div class="col-6 bg-light border">
             <h5>Comments and Reviews</h5>

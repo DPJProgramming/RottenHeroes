@@ -21,7 +21,7 @@ class Controller
         $heroId = $this->_f3->get('PARAMS.heroId');
 
         // Fetch indo
-        $stmt = $db->prepare('SELECT * FROM hero WHERE heroId = :heroId');
+        $stmt = $db->prepare('SELECT * FROM hero WHERE userId = :heroId');
         $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
         $stmt->execute();
         $hero = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,10 +32,16 @@ class Controller
         }
 
         // Fetch comments for the hero
-        $stmt = $db->prepare('SELECT * FROM comment WHERE heroId = :heroId');
+        $stmt = $db->prepare('SELECT * FROM comment WHERE heroId = :heroId AND isBlog = FALSE');
         $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
         $stmt->execute();
         $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //fetch blog for hero
+        $stmt = $db->prepare('SELECT * FROM comment WHERE userId = :heroId AND isBlog = TRUE');
+        $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
+        $stmt->execute();
+        $blog = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
         $hero['rating'] = $hero['rating'] ?? 'Not Rated';
@@ -43,11 +49,12 @@ class Controller
         $hero['intellect'] = $hero['intellect'] ?? 'Unknown';
         $hero['energy'] = $hero['energy'] ?? 'Unknown';
         $hero['speed'] = $hero['speed'] ?? 'Unknown';
-        $hero['powers'] = isset($hero['powers']) ? json_decode($hero['powers'], true) : [];
+        $hero['powers'] = $hero['powers'] ?? 'none';
         // Set variables for the template
         $this->_f3->set('hero', $hero);
         $this->_f3->set('comments', $comments);
         $this->_f3->set('heroId', $heroId);
+        $this->_f3->set('blog', $blog);
 
         $view = new Template();
         echo $view->render('views/hero.html');
@@ -90,6 +97,26 @@ class Controller
     {
         $view = new Template();
         echo $view->render('views/favorites.html');
+    }
+
+    function addBlog(){
+//        //instantiate comment object
+//        $blog = $_POST['blog'];
+//
+//        //validate and make sure appropriate hero/admin is commenting
+//        //if(hero id == id of hero page hero)
+//
+//        //add to database
+//        $db = $this->_f3->get('DB');
+//        $stmt = $db->prepare("INSERT INTO comment (body, userId, heroId, userName, rating, isBlog, created_at) VALUES (:body, :userId, :userName, :heroId, :rating, 1, NOW())");
+//        $stmt->bindParam(':body', $_POST['blog']);
+//        $stmt->bindParam(':userId', 1);
+//        $stmt->bindParam(':heroId', $_POST['hero_id']);
+//        $stmt->bindParam(':rating', 0);
+//        $stmt->execute();
+//
+//        //refresh page
+//        $this->_f3->reroute('/hero/' . $_POST['hero_id']);
     }
 }
 ?>

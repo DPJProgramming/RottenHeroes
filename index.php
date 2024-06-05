@@ -7,8 +7,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once('vendor/autoload.php');
-require_once('controllers/Controller.php');
-require_once('model/validate.php'); // Include the Validator class
+//require_once('controllers/Controller.php');
+//require_once('model/validate.php'); // Include the Validator class
 
 $path = $_SERVER['DOCUMENT_ROOT'].'/../config.php';
 require_once $path;
@@ -59,9 +59,9 @@ $f3->route('GET|POST /signup', function($f3) {
     }
 });
 
-$f3->route('GET /home', function($f3) {
-    $GLOBALS['con']->home();
-});
+//$f3->route('POST /blog', function($f3) {
+//    $GLOBALS['con']->addBlog();
+//});
 
 $f3->run();
 ?>
