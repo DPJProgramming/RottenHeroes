@@ -28,6 +28,19 @@
         </div>
         <div class="col-6 bg-light border">
             <h2>Blog</h2>
+
+            <form method="post" action="/328/RottenHeroes/blog">
+                <input type="hidden" name="hero_id" value="{{ @heroId }}">
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Post to Blog:</label>
+                    <textarea class="form-control" id="post-blog" name="blog" rows="3" required></textarea>
+                </div>
+                <check if="{{ @errors.comment }}">
+                    <p class="text-danger">{{ @errors.comment }}</p>
+                </check>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </form>
+
             <div id="blog" class="mt-4">
                 <repeat group="{{ @blog }}" value="{{ @blog }}">
                     <div class="comment mb-3">
@@ -40,15 +53,7 @@
         </div>
         <div class="col-6 bg-light border">
             <h5>Comments and Reviews</h5>
-            <div id="comments" class="mt-4">
-                <repeat group="{{ @comments }}" value="{{ @comment }}">
-                    <div class="comment mb-3">
-                        <h4>{{ @comment.username }} <small>{{ @comment.created_at }}</small></h4>
-                        <p>{{ @comment.body }}</p>
-                        <hr>
-                    </div>
-                </repeat>
-            </div>
+
             <form method="post" action="/328/RottenHeroes/submit-comment">
                 <input type="hidden" name="hero_id" value="{{ @heroId }}">
                 <div class="mb-3">
@@ -60,6 +65,16 @@
                 </check>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+
+            <div id="comments" class="mt-4">
+                <repeat group="{{ @comments }}" value="{{ @comment }}">
+                    <div class="comment mb-3">
+                        <h4>{{ @comment.userName }} <small>{{ @comment.created_at }}</small></h4>
+                        <p>{{ @comment.body }}</p>
+                        <hr>
+                    </div>
+                </repeat>
+            </div>
         </div>
     </div>
 </div>

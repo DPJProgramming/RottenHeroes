@@ -7,20 +7,52 @@ use DateTime;
 class Comment
 {
     private $_body;
+    private $_heroPage;
     private $_userId;
+    private $_userName;
     private $_date;
     private $_rating;
-    private $_heroPage;
-    private $_isBlog;
 
-    public function __contruct($text){
+    public function __construct($text = "")
+    {
         $this-> _body = $text;
-        $this-> _userId = $_SESSION['user'];
         $this-> _date = (new DateTime())->format('Y-m-d H:i:s');
         $this->_rating = 0;
         $this->_isBlog = false;
-        $this->_heroPage = $_SESSION['heroPage'];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUserName()
+    {
+        return $this->_userName;
+    }
+
+    /**
+     * @param mixed $userName
+     */
+    public function setUserName($userName): void
+    {
+        $this->_userName = $userName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeroPage()
+    {
+        return $this->_heroPage;
+    }
+
+    /**
+     * @param mixed $heroPage
+     */
+    public function setHeroPage($heroPage): void
+    {
+        $this->_heroPage = $heroPage;
+    }
+    private $_isBlog;
 
     /**
      * @return mixed

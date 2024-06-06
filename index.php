@@ -59,9 +59,9 @@ $f3->route('GET|POST /signup', function($f3) {
     }
 });
 
-//$f3->route('POST /blog', function($f3) {
-//    $GLOBALS['con']->addBlog();
-//});
+$f3->route('POST /blog', function($f3) {
+    $GLOBALS['con']->addBlog();
+});
 
 $f3->run();
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+use classes\Comment;
+
 class Controller
 {
     private $_f3;
@@ -62,16 +64,26 @@ class Controller
 
     public function submitComment(): void
     {
+        $db = $this->_f3->get('DB');
         $data = $_POST;
         $errors = Validator::validateComment($data['comment']);
 
+        //temp to add user to comment
+        $randomNumber = rand(1, 10);
+        $stmt = $db->prepare('SELECT name FROM user WHERE userId = :heroId');
+        $stmt->bindParam(':heroId', $randomNumber, PDO::PARAM_INT);
+        $stmt->execute();
+        $userName = $stmt->fetchColumn();
+
+
         if (empty($errors)) {
             $db = $this->_f3->get('DB');
-            $stmt = $db->prepare("INSERT INTO comment (body, userId, heroId, rating, isBlog, created_at) VALUES (:body, :userId, :heroId, :rating, 0, NOW())");
+            $stmt = $db->prepare("INSERT INTO comment (body, userId, userName, heroId, rating, isBlog, created_at) 
+                                VALUES (:body, :userId, :userName, :heroId, 0, 0, NOW())");
             $stmt->bindParam(':body', $data['comment'], PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $randomNumber, PDO::PARAM_INT); //$_SESSION['user_id']
+            $stmt->bindParam(':userName', $userName);
             $stmt->bindParam(':heroId', $data['hero_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':rating', 0, PDO::PARAM_INT);
             $stmt->execute();
             $this->_f3->reroute('/hero/' . $data['hero_id']);
         } else {
@@ -100,23 +112,39 @@ class Controller
     }
 
     function addBlog(){
-//        //instantiate comment object
-//        $blog = $_POST['blog'];
+        $db = $this->_f3->get('DB');
+
+        // Instantiate comment object
+        $blog = new Comment($_POST['blog']);
+        $blog->setIsBlog(true);
+        $blog->setHeroPage($_POST['hero_id']);
+
+        // Fetch the username based on the hero ID
+        $stmt = $db->prepare('SELECT name FROM user WHERE userId = :heroId');
+        $stmt->bindParam(':heroId', $blog->getHeroPage(), PDO::PARAM_INT);
+        $stmt->execute();
+        $userName = $stmt->fetchColumn();
+        $blog->setUserName($userName);
+        $blog->setUserId($blog->getHeroPage());
+
 //
 //        //validate and make sure appropriate hero/admin is commenting
-//        //if(hero id == id of hero page hero)
+//        //if(logged in id == id of hero page hero)
 //
-//        //add to database
-//        $db = $this->_f3->get('DB');
-//        $stmt = $db->prepare("INSERT INTO comment (body, userId, heroId, userName, rating, isBlog, created_at) VALUES (:body, :userId, :userName, :heroId, :rating, 1, NOW())");
-//        $stmt->bindParam(':body', $_POST['blog']);
-//        $stmt->bindParam(':userId', 1);
-//        $stmt->bindParam(':heroId', $_POST['hero_id']);
-//        $stmt->bindParam(':rating', 0);
-//        $stmt->execute();
-//
-//        //refresh page
-//        $this->_f3->reroute('/hero/' . $_POST['hero_id']);
+        //add to database
+        $stmt = $db->prepare("INSERT INTO comment (body, userId, heroId, userName, rating, isBlog, created_at) 
+                          VALUES (:body, :userId, :heroId, :userName, :rating, :isBlog, :created_at)");
+        $stmt->bindParam(':body', $blog->getBody());
+        $stmt->bindParam(':userId', $blog->getUserId());
+        $stmt->bindParam(':heroId', $blog->getHeroPage());
+        $stmt->bindParam(':userName', $blog->getUserName());
+        $stmt->bindParam(':rating', $blog->getRating());
+        $stmt->bindParam(':isBlog', $blog->getIsBlog());
+        $stmt->bindParam(':created_at', $blog->getDate());
+        $stmt->execute();
+
+        // Refresh the page
+        $this->_f3->reroute('/hero/' . $blog->getHeroPage());
     }
 }
 ?>
