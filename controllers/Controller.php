@@ -22,8 +22,8 @@ class Controller
         $db = $this->_f3->get('DB');
         $heroId = $this->_f3->get('PARAMS.heroId');
 
-        // Fetch indo
-        $stmt = $db->prepare('SELECT * FROM hero WHERE userId = :heroId');
+        // Fetch hero information
+        $stmt = $db->prepare('SELECT * FROM hero WHERE heroId = :heroId');
         $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
         $stmt->execute();
         $hero = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,19 +39,12 @@ class Controller
         $stmt->execute();
         $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        //fetch blog for hero
-        $stmt = $db->prepare('SELECT * FROM comment WHERE userId = :heroId AND isBlog = TRUE');
+        // Fetch blog for hero
+        $stmt = $db->prepare('SELECT * FROM comment WHERE heroId = :heroId AND isBlog = TRUE');
         $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
         $stmt->execute();
         $blog = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-        $hero['rating'] = $hero['rating'] ?? 'Not Rated';
-        $hero['strength'] = $hero['strength'] ?? 'Unknown';
-        $hero['intellect'] = $hero['intellect'] ?? 'Unknown';
-        $hero['energy'] = $hero['energy'] ?? 'Unknown';
-        $hero['speed'] = $hero['speed'] ?? 'Unknown';
-        $hero['powers'] = $hero['powers'] ?? 'none';
         // Set variables for the template
         $this->_f3->set('hero', $hero);
         $this->_f3->set('comments', $comments);
@@ -66,28 +59,43 @@ class Controller
     {
         $db = $this->_f3->get('DB');
         $data = $_POST;
-        $errors = Validator::validateComment($data['comment']);
 
-        //temp to add user to comment
-        $randomNumber = rand(1, 10);
-        $stmt = $db->prepare('SELECT name FROM user WHERE userId = :heroId');
-        $stmt->bindParam(':heroId', $randomNumber, PDO::PARAM_INT);
+        // Check if the user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            $this->_f3->set('errors', ['comment' => 'You must be logged in to comment.']);
+            $this->_f3->set('heroId', $data['hero_id']);
+            $this->hero();
+            return;
+        }
+
+        // Fetch the username based on the user ID from the session
+        $stmt = $db->prepare('SELECT name FROM user WHERE userId = :userId');
+        $stmt->bindParam(':userId', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->execute();
         $userName = $stmt->fetchColumn();
 
+        if (!$userName) {
+            $this->_f3->set('errors', ['comment' => 'User not found.']);
+            $this->_f3->set('heroId', $data['hero_id']);
+            $this->hero();
+            return;
+        }
 
-        if (empty($errors)) {
-            $db = $this->_f3->get('DB');
-            $stmt = $db->prepare("INSERT INTO comment (body, userId, userName, heroId, rating, isBlog, created_at) 
-                                VALUES (:body, :userId, :userName, :heroId, 0, 0, NOW())");
-            $stmt->bindParam(':body', $data['comment'], PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $randomNumber, PDO::PARAM_INT); //$_SESSION['user_id']
-            $stmt->bindParam(':userName', $userName);
-            $stmt->bindParam(':heroId', $data['hero_id'], PDO::PARAM_INT);
-            $stmt->execute();
+        // Insert the comment into the database
+        $stmt = $db->prepare("INSERT INTO comment (body, userId, userName, heroId, rating, isBlog, created_at) 
+                        VALUES (:body, :userId, :userName, :heroId, 0, 0, NOW())");
+        $stmt->bindParam(':body', $data['comment'], PDO::PARAM_STR);
+        $stmt->bindParam(':userId', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->bindParam(':userName', $userName);
+        $stmt->bindParam(':heroId', $data['hero_id'], PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            error_log('Comment successfully submitted');
             $this->_f3->reroute('/hero/' . $data['hero_id']);
         } else {
-            $this->_f3->set('errors', $errors);
+            // Detailed error logging
+            error_log('Failed to execute statement: ' . print_r($stmt->errorInfo(), true));
+            $this->_f3->set('errors', ['comment' => 'Failed to submit comment.']);
             $this->_f3->set('heroId', $data['hero_id']);
             $this->hero();
         }
@@ -95,14 +103,78 @@ class Controller
 
     public function login(): void
     {
-        $view = new Template();
-        echo $view->render('views/login.html');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $db = $this->_f3->get('DB');
+            $data = $_POST;
+
+            // Log the received POST data for debugging
+            error_log('Received POST data: ' . print_r($data, true));
+
+            // Validate and authenticate user credentials
+            $stmt = $db->prepare("SELECT * FROM user WHERE email = :email");
+            $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Log the user fetched from the database
+            error_log('User fetched from DB: ' . print_r($user, true));
+
+            if ($user && password_verify($data['password'], $user['password'])) {
+                $_SESSION['user_id'] = $user['userId'];
+                $_SESSION['user_name'] = $user['name'];
+                error_log('Login successful. Redirecting to home.');
+                $this->_f3->reroute('/');
+            } else {
+                error_log('Invalid email or password');
+                $this->_f3->set('login_error', 'Invalid email or password');
+                $view = new Template();
+                echo $view->render('views/login.html');
+            }
+        } else {
+            $view = new Template();
+            echo $view->render('views/login.html');
+        }
     }
 
     public function signUp(): void
     {
-        $view = new Template();
-        echo $view->render('views/signUp.html');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $db = $this->_f3->get('DB');
+            $data = $_POST;
+
+            // Hash the password before storing it
+            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+
+            // Insert into user table
+            $stmt = $db->prepare("INSERT INTO user (name, email, password, isAdmin) VALUES (:name, :email, :password, 0)");
+            $stmt->bindParam(':name', $data['real_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+            $stmt->execute();
+            $userId = $db->lastInsertId();
+
+            // If hero checkbox is checked, insert into hero table
+            if (isset($data['isHero'])) {
+                $stmt = $db->prepare("INSERT INTO hero (hero_name, real_name, rating, strength, intellect, energy, speed, powers, image, userId) 
+                                      VALUES (:hero_name, :real_name, :rating, :strength, :intellect, :energy, :speed, :powers, :image, :userId)");
+                $stmt->bindParam(':hero_name', $data['hero_name'], PDO::PARAM_STR);
+                $stmt->bindParam(':real_name', $data['real_name'], PDO::PARAM_STR);
+                $stmt->bindParam(':rating', $data['rating'], PDO::PARAM_INT);
+                $stmt->bindParam(':strength', $data['strength'], PDO::PARAM_INT);
+                $stmt->bindParam(':intellect', $data['intellect'], PDO::PARAM_INT);
+                $stmt->bindParam(':energy', $data['energy'], PDO::PARAM_INT);
+                $stmt->bindParam(':speed', $data['speed'], PDO::PARAM_INT);
+                $stmt->bindParam(':powers', $data['powers'], PDO::PARAM_STR);
+                $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+
+            $this->_f3->reroute('/login');
+        } else {
+            $view = new Template();
+            echo $view->render('views/signUp.html');
+        }
     }
 
     public function favorites(): void
@@ -111,7 +183,8 @@ class Controller
         echo $view->render('views/favorites.html');
     }
 
-    function addBlog(){
+    public function addBlog(): void
+    {
         $db = $this->_f3->get('DB');
 
         // Instantiate comment object
@@ -127,20 +200,16 @@ class Controller
         $blog->setUserName($userName);
         $blog->setUserId($blog->getHeroPage());
 
-//
-//        //validate and make sure appropriate hero/admin is commenting
-//        //if(logged in id == id of hero page hero)
-//
-        //add to database
+        // Add to database
         $stmt = $db->prepare("INSERT INTO comment (body, userId, heroId, userName, rating, isBlog, created_at) 
                           VALUES (:body, :userId, :heroId, :userName, :rating, :isBlog, :created_at)");
-        $stmt->bindParam(':body', $blog->getBody());
-        $stmt->bindParam(':userId', $blog->getUserId());
-        $stmt->bindParam(':heroId', $blog->getHeroPage());
-        $stmt->bindParam(':userName', $blog->getUserName());
-        $stmt->bindParam(':rating', $blog->getRating());
-        $stmt->bindParam(':isBlog', $blog->getIsBlog());
-        $stmt->bindParam(':created_at', $blog->getDate());
+        $stmt->bindParam(':body', $blog->getBody(), PDO::PARAM_STR);
+        $stmt->bindParam(':userId', $blog->getUserId(), PDO::PARAM_INT);
+        $stmt->bindParam(':heroId', $blog->getHeroPage(), PDO::PARAM_INT);
+        $stmt->bindParam(':userName', $blog->getUserName(), PDO::PARAM_STR);
+        $stmt->bindParam(':rating', $blog->getRating(), PDO::PARAM_INT);
+        $stmt->bindParam(':isBlog', $blog->getIsBlog(), PDO::PARAM_INT);
+        $stmt->bindParam(':created_at', $blog->getDate(), PDO::PARAM_STR);
         $stmt->execute();
 
         // Refresh the page

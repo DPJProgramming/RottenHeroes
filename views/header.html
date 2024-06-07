@@ -38,18 +38,29 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="favorites">My Favorites</a>
+                <a class="nav-link" href="{{ @BASE }}/favorites">My Favorites</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="myComments.html">My Comments</a>
+                <a class="nav-link" href="{{ @BASE }}/myComments.html">My Comments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="myAccount">My Account</a>
+                <a class="nav-link" href="{{ @BASE }}/myAccount">My Account</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="signUp">Sign up</a>
-            </li>
+            <check if="{{ @SESSION.user_id }}">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ @BASE }}/logout">Logout</a>
+                </li>
+            </check>
+            <check if="!{{ @SESSION.user_id }}">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ @BASE }}/signUp">Sign up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ @BASE }}/login">Login</a>
+                </li>
+            </check>
         </ul>
     </div>
 </nav>
-</div>
+</body>
+</html>

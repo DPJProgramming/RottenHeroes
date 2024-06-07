@@ -9,12 +9,18 @@
 </div>
 
 <div class="row justify-content-center">
-    <form class="form-container pt-0 col-lg-4 col-md-6 col-sm-8" id="signUp" method="POST" action="signUp.html">
-        <!-- Name -->
+    <form class="form-container pt-0 col-lg-4 col-md-6 col-sm-8" id="signUp" method="POST" action="/328/RottenHeroes/signup">
+        <!-- Real Name -->
         <div class="form-group">
-            <label for="name">Name*</label>
-            <input type="text" class="form-control" id="name" name="name" maxlength="100" minlength="1" aria-describedby="nameHelp" placeholder="Enter name" required>
+            <label for="real_name">Real Name*</label>
+            <input type="text" class="form-control" id="real_name" name="real_name" maxlength="100" minlength="1" aria-describedby="nameHelp" placeholder="Enter real name" required>
             <small id="nameHelp" class="form-text text-muted"></small>
+        </div>
+
+        <!-- Hide Real Name Checkbox -->
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="hideRealName" name="hideRealName">
+            <label class="form-check-label" for="hideRealName">Hide Real Name</label>
         </div>
 
         <!-- Email -->
@@ -24,21 +30,70 @@
             <small id="emailHelp" class="form-text text-muted"></small>
         </div>
 
-        <!-- Superhero Name -->
+        <!-- Password -->
         <div class="form-group">
-            <label for="superhero">Favorite Superhero*</label>
-            <input type="text" class="form-control" id="superhero" name="superhero" maxlength="100" minlength="1" placeholder="Enter superhero name" required>
+            <label for="password">Password*</label>
+            <input type="password" class="form-control" id="password" name="password" required>
         </div>
 
-        <!-- Comments -->
-        <div class="form-group">
-            <label for="aboutMe">About me*</label>
-            <textarea class="form-control" name="aboutMe" id="aboutMe" rows="4" placeholder="Share your thoughts" required></textarea>
+        <!-- Superhero Checkbox -->
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="isHero" name="isHero">
+            <label class="form-check-label" for="isHero">I am a Hero</label>
+        </div>
+
+        <!-- Hero Information (Visible if Hero Checkbox is checked) -->
+        <div id="hero-info" style="display:none;">
+            <div class="form-group">
+                <label for="hero_name">Hero Name*</label>
+                <input type="text" class="form-control" id="hero_name" name="hero_name">
+            </div>
+
+            <div class="form-group">
+                <label for="strength">Strength</label>
+                <input type="number" class="form-control" id="strength" name="strength" min="1" max="10">
+            </div>
+
+            <div class="form-group">
+                <label for="intellect">Intellect</label>
+                <input type="number" class="form-control" id="intellect" name="intellect" min="1" max="10">
+            </div>
+
+            <div class="form-group">
+                <label for="energy">Energy</label>
+                <input type="number" class="form-control" id="energy" name="energy" min="1" max="10">
+            </div>
+
+            <div class="form-group">
+                <label for="speed">Speed</label>
+                <input type="number" class="form-control" id="speed" name="speed" min="1" max="10">
+            </div>
+
+            <div class="form-group">
+                <label for="powers">Powers</label>
+                <input type="text" class="form-control" id="powers" name="powers">
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="text" class="form-control" id="image" name="image" placeholder="Enter image filename">
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+<script> //script to check if user is hero and expand sign up
+    document.getElementById('isHero').addEventListener('change', function() {
+        document.getElementById('hero-info').style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+            document.getElementById('hero_name').setAttribute('required', 'required');
+        } else {
+            document.getElementById('hero_name').removeAttribute('required');
+        }
+    });
+</script>
 
 </body>
 </html>

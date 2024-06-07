@@ -4,13 +4,14 @@ namespace classes;
 
 class Hero extends User
 {
-    //name userid comment[] etc are in User class
     private $_rating;
     private $_strength;
-    private$_intellect;
-    private$_energy;
-    private$_speed;
+    private $_intellect;
+    private $_energy;
+    private $_speed;
     private $_powers = array();
+    private $_realName;
+    private $_hideRealName;
 
     /**
      * @return mixed
@@ -92,13 +93,51 @@ class Hero extends User
         $this->_speed = $speed;
     }
 
+    /**
+     * @return array
+     */
     public function getPowers(): array
     {
         return $this->_powers;
     }
 
+    /**
+     * @param array $powers
+     */
     public function setPowers(array $powers): void
     {
         $this->_powers = $powers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRealName()
+    {
+        return $this->_realName;
+    }
+
+    /**
+     * @param mixed $realName
+     */
+    public function setRealName($realName): void
+    {
+        $this->_realName = $realName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHideRealName(): bool
+    {
+        return $this->_hideRealName;
+    }
+
+    /**
+     * @param bool $hideRealName
+     */
+    public function setHideRealName(bool $hideRealName): void
+    {
+        $this->_hideRealName = $hideRealName;
     }
 }

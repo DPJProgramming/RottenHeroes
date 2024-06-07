@@ -26,7 +26,7 @@ class Validator
     {
         if (empty($comment)) {
             return 'Comment is required';
-        } elseif (strlen($comment) < 5 || strlen($comment) > 500) {
+        } elseif (strlen($comment) < 1|| strlen($comment) > 500) {
             return 'Comment must be between 5 and 500 characters';
         }
         return null;

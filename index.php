@@ -7,18 +7,20 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once('vendor/autoload.php');
-//require_once('controllers/Controller.php');
-//require_once('model/validate.php'); // Include the Validator class
+require_once('controllers/Controller.php');
+require_once('model/validate.php');
 
 $path = $_SERVER['DOCUMENT_ROOT'].'/../config.php';
 require_once $path;
+
+session_start(); // Start the session
 
 $f3 = Base::instance();
 $con = new Controller($f3);
 
 try {
     $dbh = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Enable exceptions for PDO
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Excsessive error reporting
     $f3->set('DB', $dbh);
 } catch (PDOException $e) {
     die("PDO Error: " . $e->getMessage());
@@ -31,7 +33,7 @@ $f3->route('GET /', function($f3) {
 });
 
 $f3->route('GET /hero/@heroId', function($f3, $params) {
-    $f3->set('PARAMS.heroId', $params['heroId']); //grabs hero id for each hero page
+    $f3->set('PARAMS.heroId', $params['heroId']);
     $GLOBALS['con']->hero();
 });
 
@@ -40,11 +42,7 @@ $f3->route('POST /submit-comment', function($f3) {
 });
 
 $f3->route('GET|POST /login', function($f3) {
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        // Handle login form submission, still theory
-    } else {
-        $GLOBALS['con']->login();
-    }
+    $GLOBALS['con']->login();
 });
 
 $f3->route('GET /favorites', function() {
@@ -52,15 +50,16 @@ $f3->route('GET /favorites', function() {
 });
 
 $f3->route('GET|POST /signup', function($f3) {
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        // Handle sign-up form submission
-    } else {
-        $GLOBALS['con']->signUp();
-    }
+    $GLOBALS['con']->signUp();
 });
 
 $f3->route('POST /blog', function($f3) {
     $GLOBALS['con']->addBlog();
+});
+
+$f3->route('GET /logout', function($f3) {
+    session_destroy();
+    $f3->reroute('/');
 });
 
 $f3->run();
