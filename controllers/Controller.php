@@ -16,11 +16,11 @@ class Controller
         $db = $this->_f3->get('DB');
 
         // pulls each hero from the database and slots it into the home page card. -CM
-        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating DESC LIMIT 7');
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating DESC LIMIT 10');
         $stmt->execute();
         $topHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating ASC LIMIT 3');
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating ASC LIMIT 10');
         $stmt->execute();
         $worstHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -43,7 +43,7 @@ class Controller
         $hero = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (empty($hero)) {
-            $this->_f3->error(404); // Hero not found
+            $this->_f3->error(404);
             return;
         }
 
@@ -167,6 +167,31 @@ class Controller
             $stmt->execute();
             $userId = $db->lastInsertId();
 
+            //all image handeling here
+
+            $imageFileName = null;
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+                $target_dir = "img/";
+                $target_file = $target_dir . basename($_FILES["image"]["name"]);
+                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+                // image verification
+                $check = getimagesize($_FILES["image"]["tmp_name"]);
+                if ($check !== false) {
+                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                        $imageFileName = basename($_FILES["image"]["name"]);
+                        error_log('Image filename error: ' . $imageFileName);
+                    } else {
+                        echo "Sorry, there was an error uploading your file.";
+                    }
+                } else {
+                    echo "No Photo";
+                }
+            }
+
+
+
+
             // If hero checkbox is checked, insert into hero table
             if (isset($data['isHero'])) {
                 $stmt = $db->prepare("INSERT INTO hero (hero_name, real_name, rating, strength, intellect, energy, speed, powers, image, userId) 
@@ -179,7 +204,7 @@ class Controller
                 $stmt->bindParam(':energy', $data['energy'], PDO::PARAM_INT);
                 $stmt->bindParam(':speed', $data['speed'], PDO::PARAM_INT);
                 $stmt->bindParam(':powers', $data['powers'], PDO::PARAM_STR);
-                $stmt->bindParam(':image', $data['image'], PDO::PARAM_STR);
+                $stmt->bindParam(':image', $imageFileName, PDO::PARAM_STR);
                 $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
                 $stmt->execute();
             }
