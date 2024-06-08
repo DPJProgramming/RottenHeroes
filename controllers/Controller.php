@@ -13,6 +13,20 @@ class Controller
 
     public function home(): void
     {
+        $db = $this->_f3->get('DB');
+
+        // pulls each hero from the database and slots it into the home page card. -CM
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating DESC LIMIT 7');
+        $stmt->execute();
+        $topHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating ASC LIMIT 3');
+        $stmt->execute();
+        $worstHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->_f3->set('topHeroes', $topHeroes);
+        $this->_f3->set('worstHeroes', $worstHeroes);
+
         $view = new Template();
         echo $view->render('views/home.html');
     }
