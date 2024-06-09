@@ -60,7 +60,6 @@
             <h5>Comments and Reviews</h5>
             <form method="post" action="/328/RottenHeroes/submit-comment">
                 <input type="hidden" name="hero_id" value="{{ @heroId }}">
-                <input type="hidden" name="user_id" value="1"> <!-- Temporary user ID for testing -->
                 <div class="mb-3">
                     <label for="comment" class="form-label">Comment:</label>
                     <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
@@ -70,7 +69,9 @@
                 </check>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-
+            <check if="!@SESSION.user_id">
+                <p class="text-danger">You must be logged in to leave a comment. <a href="{{ @BASE }}/login">Log in here</a>.</p>
+            </check>
 
             <div id="comments" class="mt-4">
                 <repeat group="{{ @comments }}" value="{{ @comment }}">
