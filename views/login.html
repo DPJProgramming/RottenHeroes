@@ -1,5 +1,12 @@
 <include href="views/header.html"></include>
 <!-- Login Form -->
+<check if="{{ @SESSION.redirect_message }}">
+    <script>
+        alert("{{ @SESSION.redirect_message }}");
+    </script>
+</check>
+
+
 <div class="container-fluid d-flex justify-content-center">
     <div class="row">
         <header class="col text-center">

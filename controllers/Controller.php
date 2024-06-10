@@ -233,6 +233,19 @@ class Controller
 
     public function myAccount(): void
     {
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            $this->_f3->set('SESSION.redirect_message', 'Please sign in first');
+            $this->_f3->reroute('/login'); // should route and make the user log in first with a warning
+            return;
+        }
+
+
+
+
+
+
         $view = new Template();
         echo $view->render('views/myAccount.html');
     }
