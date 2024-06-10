@@ -1,10 +1,46 @@
 <include href="views/header.html"></include>
 
+<div class="container">
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-12">
+            <h2>Welcome to your account page, {{ @user.name }}!</h2>
+            <p>Email: {{ @user.email }}</p>
+        </div>
+        <!-- Hero Information Section (only if the user has a hero ID) -->
+        <check if="{{ @hero }}">
+            <div class="col-12">
+                <h2>Hero Information</h2>
+                <p>Hero Name: {{ @hero.hero_name }}</p>
+                <p>Description: {{ @hero.description }}</p>
+                <p>Rating: {{ @hero.rating }}</p>
+                <p>Strength: {{ @hero.strength }}</p>
+                <p>Intellect: {{ @hero.intellect }}</p>
+                <p>Energy: {{ @hero.energy }}</p>
+                <p>Speed: {{ @hero.speed }}</p>
+                <p>Powers: {{ @hero.powers }}</p>
+            </div>
 
+            <!-- Blog Posts Section (only if the user has a hero ID) -->
+            <div class="col-12">
+                <h3>Recent Blog Posts</h3>
+                <ul>
+                    <repeat group="{{ @blogPosts }}" value="{{ @blogPost }}">
+                        <li>{{ @blogPost.body }} - {{ @blogPost.created_at }}</li>
+                    </repeat>
+                </ul>
+            </div>
+        </check>
 
-<h2>Welcome to your account page, {{ @user.name }}!</h2>
-
-
-
-</body>
-</html>
+        <!-- Activity Section -->
+        <div class="col-12">
+            <h2>Recent Activity</h2>
+            <h3>Recent Comments</h3>
+            <ul>
+                <repeat group="{{ @comments }}" value="{{ @comment }}">
+                    <li>{{ @comment.body }} - {{ @comment.created_at }}</li>
+                </repeat>
+            </ul>
+        </div>
+    </div>
+</div>

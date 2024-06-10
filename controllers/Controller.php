@@ -248,8 +248,32 @@ class Controller
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->_f3->set('user', $user);
+        // Checks if the user has a hero ID and pulls hero information if not only shows user stuff
+        $stmt = $db->prepare('SELECT * FROM hero WHERE userId = :userId');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $hero = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if ($hero) {
+            $this->_f3->set('hero', $hero);
 
+            // pulls recent blog posts
+            $stmt = $db->prepare('SELECT * FROM comment WHERE heroId = :heroId AND isBlog = TRUE ORDER BY created_at DESC LIMIT 5');
+            $stmt->bindParam(':heroId', $hero['heroId'], PDO::PARAM_INT);
+            $stmt->execute();
+            $blogPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->_f3->set('blogPosts', $blogPosts);
+        } else {
+            $this->_f3->clear('hero');
+            $this->_f3->clear('blogPosts');
+        }
+
+        // pulls recent comments
+        $stmt = $db->prepare('SELECT * FROM comment WHERE userId = :userId ORDER BY created_at DESC LIMIT 5');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->_f3->set('comments', $comments);
 
 
         $view = new Template();
