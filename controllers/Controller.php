@@ -231,6 +231,14 @@ class Controller
         echo $view->render('views/favorites.html');
     }
 
+    public function myAccount(): void
+    {
+        $view = new Template();
+        echo $view->render('views/myAccount.html');
+    }
+
+
+
     public function addBlog(): void
     {
         $db = $this->_f3->get('DB');

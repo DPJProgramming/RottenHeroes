@@ -49,6 +49,10 @@ $f3->route('GET /favorites', function() {
     $GLOBALS['con']->favorites();
 });
 
+$f3->route('GET /myAccount', function($f3) {
+    $GLOBALS['con']->myAccount();
+});
+
 $f3->route('GET|POST /signup', function($f3) {
     $GLOBALS['con']->signUp();
 });
