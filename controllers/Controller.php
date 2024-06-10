@@ -33,8 +33,10 @@ class Controller
 
     public function hero(): void
     {
+        session_start();
         $db = $this->_f3->get('DB');
         $heroId = $this->_f3->get('PARAMS.heroId');
+        $userId = $_SESSION['user_id'] ?? null;
 
         // Fetch hero information
         $stmt = $db->prepare('SELECT * FROM hero WHERE heroId = :heroId');
@@ -59,12 +61,19 @@ class Controller
         $stmt->execute();
         $blog = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+//        echo "Logged in user ID: " . $userId . "<br>";
+//        echo "Hero ID on page: " . $heroId . "<br>";
+//        echo "Hero user ID from database: " . $hero['userId'] . "<br>";
+
+        $isHero = ($userId !== null && $userId == $hero['userId']); //is hero check to
+        //allow only owner of heros page to blog
+
         // Set variables for the template
         $this->_f3->set('hero', $hero);
         $this->_f3->set('comments', $comments);
         $this->_f3->set('heroId', $heroId);
         $this->_f3->set('blog', $blog);
-
+        $this->_f3->set('isHero', $isHero);
         $view = new Template();
         echo $view->render('views/hero.html');
     }

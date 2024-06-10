@@ -33,6 +33,7 @@
         <!-- Blog Section -->
         <div class="col-6 bg-light border">
             <h2>Blog</h2>
+            <check if="{{@isHero}}">
             <form method="post" action="/328/RottenHeroes/blog">
                 <input type="hidden" name="hero_id" value="{{ @heroId }}">
                 <div class="mb-3">
@@ -44,6 +45,9 @@
                 </check>
                 <button type="submit" class="btn btn-primary">Post</button>
             </form>
+            </check>
+
+
             <div id="blog" class="mt-4">
                 <repeat group="{{ @blog }}" value="{{ @blog }}">
                     <div class="comment mb-3">
