@@ -240,8 +240,14 @@ class Controller
             $this->_f3->reroute('/login'); // should route and make the user log in first with a warning
             return;
         }
+        $db = $this->_f3->get('DB');
+        $userId = $_SESSION['user_id'];
 
-
+        $stmt = $db->prepare('SELECT * FROM user WHERE userId = :userId');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->_f3->set('user', $user);
 
 
 
