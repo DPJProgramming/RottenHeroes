@@ -2,6 +2,25 @@
     height: 30%;
 }
 
-.card-width{
-    width: 25%;
+.fit-image{
+    object-fit: cover;
+    object-position: top;
+}
+
+.image-height{
+    height: 30vh;
+}
+
+.home-card{
+    min-width: 18rem !important;
+}
+
+.worst-background{
+    background: #fc8383;
+
+}
+
+.best-background{
+    background: #83b4fc;
+
 }

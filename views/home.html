@@ -1,49 +1,55 @@
 <include href="views/header.html"></include>
-<body>
-<!--Top heroes row-->
-<div class="container row-height">
-    <div class="row ms-1 p-2 border border-dark">
-        <h3 class="text-center">Top Heroes</h3>
+<br>
 
-        <div class="overflow-x-scroll">
-            <div class="d-flex flex-nowrap">
+<!--Top heroes row-->
+<div class="container-fluid m-2">
+    <h3 class="text-center">Top Heroes</h3>
+    <div class="row p-1 border border-dark best-background">
+        <div class="overflow-auto p-2">
+            <div class="d-flex flex-nowrap ">
                 <repeat group="{{ @topHeroes }}" value="{{ @hero }}">
-                    <a href="{{ @BASE }}/hero/{{ @hero.heroId }}" class="card col-3 mx-2">
-                        <!--Currently uses a default of wonderman till we get the image submission set up
-                        -->
-                        <img class="card-img-top p-2" src="{{ @BASE }}/img/{{ @hero.image ?: 'wonderman.jpg' }}" alt="hero">
-                        <div class="card-body">
-                            <h3 class="text-center">{{ @hero.hero_name }}</h3>
-                            <p class="text-center">Strength - {{ @hero.strength }}/10</p>
-                            <p class="text-center">Energy - {{ @hero.energy }}/10</p>
-                            <p class="text-center">Intellect - {{ @hero.intellect }}/10 </p>
-                            <p class="text-center">{{ @hero.bio }}</p>
+                    <div class="home-card">
+                    <a href="{{ @BASE }}/hero/{{ @hero.heroId }}" class="card mx-2">
+                        <div class="container">
+                            <img class="card-img-top p-2 image-height fit-image" src="{{ @BASE }}/img/{{ @hero.image ?: 'chicken.jpg' }}" alt="hero">
+                            <div class="card-body">
+                                <h3 class="text-center">{{ @hero.hero_name }}</h3>
+                                <p class="text-center">Strength - {{ @hero.strength }}/10</p>
+                                <p class="text-center">Energy - {{ @hero.energy }}/10</p>
+                                <p class="text-center">Intellect - {{ @hero.intellect }}/10 </p>
+                                <p class="text-center">{{ @hero.bio }}</p>
+                            </div>
                         </div>
                     </a>
+                    </div>
                 </repeat>
             </div>
         </div>
     </div>
 </div>
+<br>
 
 <!--Bottom heroes row-->
-<div class="container row-height mt-2">
-    <div class="row ms-1 p-2 border border-dark">
-        <h3 class="text-center">Worst Heroes</h3>
-
-        <div class="overflow-x-scroll">
+<div class="container-fluid">
+    <h3 class="text-center">Worst Heroes</h3>
+    <div class="row ms-1 p-2 border border-dark worst-background">
+        <div class="overflow-auto">
             <div class="d-flex flex-nowrap">
                 <repeat group="{{ @worstHeroes }}" value="{{ @hero }}">
-                    <a href="{{ @BASE }}/hero/{{ @hero.heroId }}" class="card col-3 mx-2">
-                        <img class="card-img-top p-2" src="{{ @BASE }}/img/{{ @hero.image ?: 'wonderman.jpg' }}" alt="hero">
-                        <div class="card-body">
-                            <h3 class="text-center">{{ @hero.hero_name }}</h3>
-                            <p class="text-center">Strength - {{ @hero.strength }}/10</p>
-                            <p class="text-center">Energy - {{ @hero.energy }}/10</p>
-                            <p class="text-center">Intellect - {{ @hero.intellect }}/10 </p>
-                            <p class="text-center">{{ @hero.bio }}</p>
-                        </div>
-                    </a>
+                    <div class="home-card">
+                        <a href="{{ @BASE }}/hero/{{ @hero.heroId }}" class="card mx-2">
+                            <div class="container">
+                                <img class="card-img-top p-2 image-height fit-image" src="{{ @BASE }}/img/{{ @hero.image ?: 'chicken.jpg' }}" alt="hero">
+                                <div class="card-body">
+                                    <h3 class="text-center">{{ @hero.hero_name }}</h3>
+                                    <p class="text-center">Strength - {{ @hero.strength }}/10</p>
+                                    <p class="text-center">Energy - {{ @hero.energy }}/10</p>
+                                    <p class="text-center">Intellect - {{ @hero.intellect }}/10 </p>
+                                    <p class="text-center">{{ @hero.bio }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </repeat>
             </div>
         </div>
