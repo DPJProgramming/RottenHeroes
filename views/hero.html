@@ -6,27 +6,35 @@
             <div class="container">
                 <div class="container hero-image-container">
                     <h2 class="text-center">{{ @hero.hero_name }}</h2>
-                    <check if="{{@hero.posRating / @hero.numRatings * 100 < 60 }}">
-                        <div class="row align-items-center">
+                    <div class="row align-items-center">
+                        <check if="{{@hero.posRating / @hero.numRatings * 100 < 60 }}">
                             <div class="col-auto">
-                                <img src="../img/badapple.png" width="50" height="50" alt="apple">
+                                <img src="../img/badapple.png" width="75" height="75" alt="apple">
                             </div>
                             <div class="col-auto">
                                 <h3 class="mb-0">{{(@hero.posRating / @hero.numRatings) * 100}}%</h3>
                             </div>
-                        </div>
-                    </check>
-                    <check if="{{@hero.posRating / @hero.numRatings * 100 >= 60 }}">
-                        <div class="row align-items-center">
+                        </check>
+                        <check if="{{@hero.posRating / @hero.numRatings * 100 >= 60 }}">
                             <div class="col-auto">
-                                <img src="../img/medal.svg" width="50" height="50" alt="apple">
+                                <img src="../img/medal.svg" width="75" height="75" alt="apple">
                             </div>
                             <div class="col-auto">
                                 <h3 class="mb-0">{{(@hero.posRating / @hero.numRatings) * 100}}%</h3>
                             </div>
+                        </check>
+                        <div class="col-auto">
+<!--                            form method="post" action="/328/RottenHeroes/blog">-->
+                            <form method="post" action="/328/RottenHeroes/rateHeroUp" name="rateHeroUpForm">
+                                <input type="image" src="../img/arrowup.svg" height="36" width="36" name="rateHeroUp" alt="arrow-up" value="up">
+                                <input type="hidden"  name="hero_id" value="{{ @heroId }}">
+                            </form>
+                            <form method="post" action="/328/RottenHeroes/rateHeroDown" name="rateHeroUpForm">
+                                <input type="image" src="../img/arrowdown.svg" height="36" width="36" name="rateHeroDown" alt="arrow-down" value="down">
+                                <input type="hidden"  name="hero_id" value="{{ @heroId }}">
+                            </form>
                         </div>
-
-                    </check>
+                    </div>
                     <br>
                     <div class="container hero-image-container">
                         <img src="../img/{{ @hero.image }}" class="img-fluid" alt="{{ @hero.hero_name }}">

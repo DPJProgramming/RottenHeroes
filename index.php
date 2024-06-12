@@ -61,6 +61,14 @@ $f3->route('POST /blog', function($f3) {
     $GLOBALS['con']->addBlog();
 });
 
+$f3->route('POST /rateHeroUp', function($f3) {
+    $GLOBALS['con']->rateHeroUp();
+});
+
+$f3->route('POST /rateHeroDown', function($f3) {
+    $GLOBALS['con']->rateHeroDown();
+});
+
 $f3->route('GET /logout', function($f3) {
     session_destroy();
     $f3->reroute('/');

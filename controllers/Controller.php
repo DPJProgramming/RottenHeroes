@@ -1,6 +1,7 @@
 <?php
 
 use classes\Comment;
+use classes\Hero;
 
 class Controller
 {
@@ -314,6 +315,37 @@ class Controller
 
         // Refresh the page
         $this->_f3->reroute('/hero/' . $blog->getHeroPage());
+    }
+
+    function rateHeroUp(){
+        $db = $this->_f3->get('DB');
+
+        // Instantiate hero object
+        $hero = new Hero();
+        $hero->setUserId($_POST['hero_id']);
+
+        // update positive and total ratings
+        $stmt = $db->prepare('UPDATE hero SET posRating = posRating + 1 WHERE userId = :heroId;
+                            UPDATE hero SET numRatings = numRatings + 1 WHERE userId = :heroId;');
+        $stmt->bindParam(':heroId', $hero->getUserId(), PDO::PARAM_INT);
+        $stmt->execute();
+
+        $this->_f3->reroute('/hero/' . $hero->getUserId());
+    }
+
+    function rateHeroDown(){
+        $db = $this->_f3->get('DB');
+
+        // Instantiate hero object
+        $hero = new Hero();
+        $hero->setUserId($_POST['heroId']);
+
+        // update positive and total ratings
+        $stmt = $db->prepare('UPDATE hero SET numRatings = numRatings + 1 WHERE userId = :heroId;');
+        $stmt->bindParam(':heroId', $hero->getUserId(), PDO::PARAM_INT);
+        $stmt->execute();
+
+        $this->_f3->reroute('/hero/' . $hero->getUserId());
     }
 }
 ?>
