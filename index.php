@@ -73,6 +73,9 @@ $f3->route('POST /delete-comment', function($f3) {
     $GLOBALS['con']->deleteComment();
 });
 
+$f3->route('POST /edit-comment', function($f3) {
+    $GLOBALS['con']->updateComment();
+});
 
 $f3->route('GET /logout', function($f3) {
     session_destroy();

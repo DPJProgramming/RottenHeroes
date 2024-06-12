@@ -46,6 +46,13 @@ class CommentBlogDataLayer
         $stmt->execute();
     }
 
+    public function updateComment($commentData)
+    {
+        $stmt = $this->db->prepare("UPDATE comment SET body = :body WHERE commentId = :commentId");
+        $stmt->bindParam(':body', $commentData['body'], PDO::PARAM_STR);
+        $stmt->bindParam(':commentId', $commentData['comment_id'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
 
 }
 

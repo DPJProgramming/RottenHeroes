@@ -284,8 +284,29 @@ class Controller
 
         $this->_f3->reroute('/hero/' . $data['hero_id']);
     }
+    public function updateComment(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $commentId = $_POST['comment_id'];
+            $newBody = $_POST['comment'];
 
+            // Check if the user is logged in
+            if (!isset($_SESSION['user_id'])) {
+                $this->_f3->set('errors', ['comment' => 'You must be logged in to edit a comment.']);
+                $this->_f3->reroute('/hero/' . $_POST['hero_id']);
+                return;
+            }
 
+            $commentData = [
+                'body' => $newBody,
+                'comment_id' => $commentId
+            ];
+            $this->commentBlogModel->updateComment($commentData);
+            $this->_f3->reroute('/hero/' . $_POST['hero_id']);
+        } else {
+            $this->_f3->error(404);
+        }
+    }
 
 
 }
