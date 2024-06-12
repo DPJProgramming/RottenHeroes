@@ -338,10 +338,10 @@ class Controller
 
         // Instantiate hero object
         $hero = new Hero();
-        $hero->setUserId($_POST['heroId']);
+        $hero->setUserId($_POST['hero_id']);
 
         // update positive and total ratings
-        $stmt = $db->prepare('UPDATE hero SET numRatings = numRatings + 1 WHERE userId = :heroId;');
+        $stmt = $db->prepare('UPDATE hero SET numRatings = numRatings + 1 WHERE heroId  = :heroId;');
         $stmt->bindParam(':heroId', $hero->getUserId(), PDO::PARAM_INT);
         $stmt->execute();
 
