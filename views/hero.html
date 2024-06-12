@@ -3,17 +3,80 @@
     <div class="row">
         <!-- Hero Information -->
         <div class="col-6 bg-light border">
-            <h2>{{ @hero.hero_name }}</h2>
-            <img src="../img/{{ @hero.image }}" alt="{{ @hero.hero_name }}">
+            <div class="container">
+                <div class="container hero-image-container">
+                    <h2 class="text-center">{{ @hero.hero_name }}</h2>
+                    <check if="{{@hero.posRating / @hero.numRatings * 100 < 60 }}">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="../img/badapple.png" width="50" height="50" alt="apple">
+                            </div>
+                            <div class="col-auto">
+                                <h3 class="mb-0">{{(@hero.posRating / @hero.numRatings) * 100}}%</h3>
+                            </div>
+                        </div>
+                    </check>
+                    <check if="{{@hero.posRating / @hero.numRatings * 100 >= 60 }}">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="../img/medal.svg" width="50" height="50" alt="apple">
+                            </div>
+                            <div class="col-auto">
+                                <h3 class="mb-0">{{(@hero.posRating / @hero.numRatings) * 100}}%</h3>
+                            </div>
+                        </div>
+
+                    </check>
+                    <br>
+                    <div class="container hero-image-container">
+                        <img src="../img/{{ @hero.image }}" class="img-fluid" alt="{{ @hero.hero_name }}">
+                    </div>
+                </div>
+            </div>
             <p>
                 {{ @hero.description }}<br>
-                Rating: {{ @hero.rating }}<br>
-                Strength: {{ @hero.strength }}<br>
-                Intellect: {{ @hero.intellect }}<br>
-                Energy: {{ @hero.energy }}<br>
-                Speed: {{ @hero.speed }}<br>
-                Powers: {{ @hero.powers }}<br>
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Strength:</h5>
+                </div>
+                <div class="col-md-9">
+                    {{ @hero.strength }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Intellect:</h5>
+                </div>
+                <div class="col-md-9">
+                    {{ @hero.intellect }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Energy:</h5>
+                </div>
+                <div class="col-md-9">
+                    {{ @hero.energy }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Speed:</h5>
+                </div>
+                <div class="col-md-9">
+                    {{ @hero.speed }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Powers:</h5>
+                </div>
+                <div class="col-md-9">
+                    {{ @hero.powers }}
+                </div>
+            </div>
             </p>
+
         </div>
 
         <!-- News Section -->

@@ -16,11 +16,11 @@ class Controller
         $db = $this->_f3->get('DB');
 
         // pulls each hero from the database and slots it into the home page card. -CM
-        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating DESC LIMIT 10');
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY posRating / numRatings DESC LIMIT 10');
         $stmt->execute();
         $topHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $db->prepare('SELECT * FROM hero ORDER BY rating ASC LIMIT 10');
+        $stmt = $db->prepare('SELECT * FROM hero ORDER BY posRating / numRatings ASC LIMIT 10');
         $stmt->execute();
         $worstHeroes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -203,11 +203,12 @@ class Controller
 
             // If hero checkbox is checked, insert into hero table
             if (isset($data['isHero'])) {
-                $stmt = $db->prepare("INSERT INTO hero (hero_name, real_name, rating, strength, intellect, energy, speed, powers, image, userId) 
-                                      VALUES (:hero_name, :real_name, :rating, :strength, :intellect, :energy, :speed, :powers, :image, :userId)");
+                $stmt = $db->prepare("INSERT INTO hero (hero_name, real_name, posRating, numRatings, strength, intellect, energy, speed, powers, image, userId) 
+                                      VALUES (:hero_name, :real_name, 100, 1, :strength, :intellect, :energy, :speed, :powers, :image, :userId)");
                 $stmt->bindParam(':hero_name', $data['hero_name'], PDO::PARAM_STR);
                 $stmt->bindParam(':real_name', $data['real_name'], PDO::PARAM_STR);
-                $stmt->bindParam(':rating', $data['rating'], PDO::PARAM_INT);
+//                $stmt->bindParam(':rating', $data['rating'], PDO::PARAM_INT);
+//                $stmt->bindParam(':numRating', $data['rating'], PDO::PARAM_INT);
                 $stmt->bindParam(':strength', $data['strength'], PDO::PARAM_INT);
                 $stmt->bindParam(':intellect', $data['intellect'], PDO::PARAM_INT);
                 $stmt->bindParam(':energy', $data['energy'], PDO::PARAM_INT);

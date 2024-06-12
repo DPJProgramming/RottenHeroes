@@ -4,7 +4,8 @@ namespace classes;
 
 class Hero extends User
 {
-    private $_rating;
+    private $_posRatings;
+    private $_numRatings;
     private $_strength;
     private $_intellect;
     private $_energy;
@@ -13,20 +14,33 @@ class Hero extends User
     private $_realName;
     private $_hideRealName;
 
+    public function getNumRatings()
+    {
+        return $this->_numRatings;
+    }
+
+    /**
+     * @param mixed $numRatings
+     */
+    public function setNumRatings($numRatings): void
+    {
+        $this->_numRatings = $numRatings;
+    }
+
     /**
      * @return mixed
      */
-    public function getRating()
+    public function getPosRatings()
     {
-        return $this->_rating;
+        return $this->_posRatings;
     }
 
     /**
      * @param mixed $rating
      */
-    public function setRating($rating): void
+    public function setPosRatings($rating): void
     {
-        $this->_rating = $rating;
+        $this->_posRatings = $rating;
     }
 
     /**
