@@ -153,6 +153,15 @@
                     <div class="comment mb-3">
                         <h4>{{ @comment.userName }} <small>{{ @comment.created_at }}</small></h4>
                         <p>{{ @comment.body }}</p>
+
+
+                        <check if="{{ @SESSION.user_id == @comment.userId }}">
+                            <form method="post" action="/328/RottenHeroes/delete-comment" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                <input type="hidden" name="comment_id" value="{{ @comment.commentId }}">
+                                <input type="hidden" name="hero_id" value="{{ @heroId }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </check>
                         <hr>
                     </div>
                 </repeat>

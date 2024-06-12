@@ -37,6 +37,16 @@ class CommentBlogDataLayer
         $stmt->bindParam(':isBlog', $commentData['isBlog'], PDO::PARAM_BOOL);
         $stmt->execute();
     }
+  //Allows for the deletion of comments
+    public function deleteComment($commentId, $userId)
+    {
+        $stmt = $this->db->prepare('DELETE FROM comment WHERE commentId = :commentId AND userId = :userId');
+        $stmt->bindParam(':commentId', $commentId, PDO::PARAM_INT);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
 }
 
 ?>

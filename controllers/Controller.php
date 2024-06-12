@@ -266,5 +266,32 @@ class Controller
         $this->heroModel->rateHeroDown($heroId);
         $this->_f3->reroute('/hero/' . $heroId);
     }
+    public function deleteComment(): void
+    {
+        $db = $this->_f3->get('DB');
+        $data = $_POST;
+
+        if (!isset($_SESSION['user_id'])) {
+            $this->_f3->set('errors', ['comment' => 'You must be logged in to delete a comment.']);
+            $this->_f3->reroute('/hero/' . $data['hero_id']);
+            return;
+        }
+
+        $commentId = $data['comment_id'];
+        $userId = $_SESSION['user_id'];
+
+        $this->commentBlogModel->deleteComment($commentId, $userId);
+
+        $this->_f3->reroute('/hero/' . $data['hero_id']);
+    }
+
+
+
+
 }
+
+
+
+
+
 ?>

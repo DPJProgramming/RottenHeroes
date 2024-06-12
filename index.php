@@ -69,6 +69,11 @@ $f3->route('POST /rateHeroDown', function($f3) {
     $GLOBALS['con']->rateHeroDown();
 });
 
+$f3->route('POST /delete-comment', function($f3) {
+    $GLOBALS['con']->deleteComment();
+});
+
+
 $f3->route('GET /logout', function($f3) {
     session_destroy();
     $f3->reroute('/');
