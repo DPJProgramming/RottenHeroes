@@ -1,33 +1,90 @@
 <?php
-
+/**
+ * Hero class representing a superhero with various attributes.
+ *
+ * This class extends the User class and adds additional properties specific to a superhero,
+ * such as strength, intellect, energy, speed, powers, real name, and visibility of real name.
+ *
+ * @category   Classes
+ * @package    Classes
+ * @subpackage Hero
+ * @author     Your Name <your.email@example.com>
+ * @license    https://opensource.org/licenses/MIT  MIT License
+ * @link       https://example.com/classes/Hero.php
+ */
 namespace classes;
 
 class Hero extends User
 {
+    /**
+     * @var int Positive ratings received by the hero.
+     */
     private $_posRatings;
+
+    /**
+     * @var int Number of ratings received by the hero.
+     */
     private $_numRatings;
+
+    /**
+     * @var int Strength level of the hero.
+     */
     private $_strength;
+
+    /**
+     * @var int Intellect level of the hero.
+     */
     private $_intellect;
+
+    /**
+     * @var int Energy level of the hero.
+     */
     private $_energy;
+
+    /**
+     * @var int Speed level of the hero.
+     */
     private $_speed;
+
+    /**
+     * @var array Powers possessed by the hero.
+     */
     private $_powers;
+
+    /**
+     * @var string Real name of the hero.
+     */
     private $_realName;
+
+    /**
+     * @var bool Whether the real name of the hero should be hidden.
+     */
     private $_hideRealName;
 
     /**
-     * @param $_posRatings
-     * @param $_numRatings
-     * @param $_strength
-     * @param $_intellect
-     * @param $_energy
-     * @param $_speed
-     * @param $_powers
-     * @param $_realName
-     * @param $_hideRealName
+     * Constructor for Hero class.
+     *
+     * @param int    $_posRatings   Positive ratings received by the hero.
+     * @param int    $_numRatings   Number of ratings received by the hero.
+     * @param int    $_strength     Strength level of the hero.
+     * @param int    $_intellect    Intellect level of the hero.
+     * @param int    $_energy       Energy level of the hero.
+     * @param int    $_speed        Speed level of the hero.
+     * @param array  $_powers       Powers possessed by the hero.
+     * @param string $_realName     Real name of the hero.
+     * @param bool   $_hideRealName Whether the real name of the hero should be hidden.
      */
-    public function __construct(int $_posRatings = 0, int $_numRatings = 1, int $_strength = 10, int $_intellect = 10, int $_energy = 10, int $_speed = 10,
-                                array $_powers = [], string $_realName = '', bool $_hideRealName = true)
-    {
+    public function __construct(
+        int $_posRatings = 0,
+        int $_numRatings = 1,
+        int $_strength = 10,
+        int $_intellect = 10,
+        int $_energy = 10,
+        int $_speed = 10,
+        array $_powers = [],
+        string $_realName = '',
+        bool $_hideRealName = true
+    ) {
         parent::__construct();
 
         $this->_posRatings = $_posRatings;
@@ -41,101 +98,135 @@ class Hero extends User
         $this->_hideRealName = $_hideRealName;
     }
 
-
-    public function getNumRatings()
+    /**
+     * Get the number of ratings received by the hero.
+     *
+     * @return int
+     */
+    public function getNumRatings(): int
     {
         return $this->_numRatings;
     }
 
     /**
-     * @param mixed $numRatings
+     * Set the number of ratings received by the hero.
+     *
+     * @param int $numRatings The number of ratings received by the hero.
+     * @return void
      */
-    public function setNumRatings($numRatings): void
+    public function setNumRatings(int $numRatings): void
     {
         $this->_numRatings = $numRatings;
     }
 
     /**
-     * @return mixed
+     * Get the positive ratings received by the hero.
+     *
+     * @return int
      */
-    public function getPosRatings()
+    public function getPosRatings(): int
     {
         return $this->_posRatings;
     }
 
     /**
-     * @param mixed $rating
+     * Set the positive ratings received by the hero.
+     *
+     * @param int $rating The positive ratings received by the hero.
+     * @return void
      */
-    public function setPosRatings($rating): void
+    public function setPosRatings(int $rating): void
     {
         $this->_posRatings = $rating;
     }
 
     /**
-     * @return mixed
+     * Get the strength level of the hero.
+     *
+     * @return int
      */
-    public function getStrength()
+    public function getStrength(): int
     {
         return $this->_strength;
     }
 
     /**
-     * @param mixed $strength
+     * Set the strength level of the hero.
+     *
+     * @param int $strength The strength level of the hero.
+     * @return void
      */
-    public function setStrength($strength): void
+    public function setStrength(int $strength): void
     {
         $this->_strength = $strength;
     }
 
     /**
-     * @return mixed
+     * Get the intellect level of the hero.
+     *
+     * @return int
      */
-    public function getIntellect()
+    public function getIntellect(): int
     {
         return $this->_intellect;
     }
 
     /**
-     * @param mixed $intellect
+     * Set the intellect level of the hero.
+     *
+     * @param int $intellect The intellect level of the hero.
+     * @return void
      */
-    public function setIntellect($intellect): void
+    public function setIntellect(int $intellect): void
     {
         $this->_intellect = $intellect;
     }
 
     /**
-     * @return mixed
+     * Get the energy level of the hero.
+     *
+     * @return int
      */
-    public function getEnergy()
+    public function getEnergy(): int
     {
         return $this->_energy;
     }
 
     /**
-     * @param mixed $energy
+     * Set the energy level of the hero.
+     *
+     * @param int $energy The energy level of the hero.
+     * @return void
      */
-    public function setEnergy($energy): void
+    public function setEnergy(int $energy): void
     {
         $this->_energy = $energy;
     }
 
     /**
-     * @return mixed
+     * Get the speed level of the hero.
+     *
+     * @return int
      */
-    public function getSpeed()
+    public function getSpeed(): int
     {
         return $this->_speed;
     }
 
     /**
-     * @param mixed $speed
+     * Set the speed level of the hero.
+     *
+     * @param int $speed The speed level of the hero.
+     * @return void
      */
-    public function setSpeed($speed): void
+    public function setSpeed(int $speed): void
     {
         $this->_speed = $speed;
     }
 
     /**
+     * Get the powers possessed by the hero.
+     *
      * @return array
      */
     public function getPowers(): array
@@ -144,7 +235,10 @@ class Hero extends User
     }
 
     /**
-     * @param array $powers
+     * Set the powers possessed by the hero.
+     *
+     * @param array $powers The powers possessed by the hero.
+     * @return void
      */
     public function setPowers(array $powers): void
     {
@@ -152,22 +246,29 @@ class Hero extends User
     }
 
     /**
-     * @return mixed
+     * Get the real name of the hero.
+     *
+     * @return string
      */
-    public function getRealName()
+    public function getRealName(): string
     {
         return $this->_realName;
     }
 
     /**
-     * @param mixed $realName
+     * Set the real name of the hero.
+     *
+     * @param string $realName The real name of the hero.
+     * @return void
      */
-    public function setRealName($realName): void
+    public function setRealName(string $realName): void
     {
         $this->_realName = $realName;
     }
 
     /**
+     * Check if the real name of the hero should be hidden.
+     *
      * @return bool
      */
     public function getHideRealName(): bool
@@ -176,20 +277,35 @@ class Hero extends User
     }
 
     /**
-     * @param bool $hideRealName
+     * Set whether the real name of the hero should be hidden.
+     *
+     * @param bool $hideRealName Whether the real name of the hero should be hidden.
+     * @return void
      */
     public function setHideRealName(bool $hideRealName): void
     {
         $this->_hideRealName = $hideRealName;
     }
 
-    public function setUserId($userId)
+    /**
+     * Set the user ID associated with the hero.
+     *
+     * @param mixed $userId The user ID associated with the hero.
+     * @return void
+     */
+    public function setUserId($userId): void
     {
         parent::setUserId($userId);
     }
 
+    /**
+     * Get the user ID associated with the hero.
+     *
+     * @return mixed
+     */
     public function getUserId()
     {
-        return parent::getUserId(); // TODO: Change the autogenerated stub
+        return parent::getUserId();
     }
+
 }

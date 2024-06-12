@@ -3,18 +3,22 @@
 use classes\Comment;
 use classes\Hero;
 
+/**
+ * Controller class for handling application logic.
+ */
 class Controller
 {
+    /** @var object The Fat-Free Framework instance. */
     private $_f3;
 
+    /**
+     * Constructor.
+     *
+     * @param object $f3 The Fat-Free Framework instance.
+     */
     public function __construct($f3)
     {
         $this->_f3 = $f3;
-
-//        // Ensure DB is correctly set in the framework's hive
-//        if (!$f3->exists('DB')) {
-//            die('Database connection not available');
-//        }
 
         $db = $f3->get('DB');
 
@@ -27,6 +31,9 @@ class Controller
         $this->commentBlogModel = new CommentBlogDataLayer($db);
     }
 
+    /**
+     * Displays the home page.
+     */
     public function home(): void
     {
         $topHeroes = $this->heroModel->getTopHeroes();
@@ -39,6 +46,9 @@ class Controller
         echo $view->render('views/home.html');
     }
 
+    /**
+     * Displays hero details page.
+     */
     public function hero(): void
     {
         session_start();
@@ -55,12 +65,7 @@ class Controller
         $comments = $this->commentBlogModel->getCommentsByHeroId($heroId, false);
         $blog = $this->commentBlogModel->getCommentsByHeroId($heroId, true);
 
-//        echo "Logged in user ID: " . $userId . "<br>";
-//        echo "Hero ID on page: " . $heroId . "<br>";
-//        echo "Hero user ID from database: " . $hero['userId'] . "<br>";
-
-        $isHero = ($userId !== null && $userId == $hero['userId']); //is hero check to
-        //allow only owner of heros page to blog
+        $isHero = ($userId !== null && $userId == $hero['userId']);
 
         // Set variables for the template
         $this->_f3->set('hero', $hero);
@@ -73,12 +78,14 @@ class Controller
         echo $view->render('views/hero.html');
     }
 
+    /**
+     * Handles submission of comments.
+     */
     public function submitComment(): void
     {
         $db = $this->_f3->get('DB');
         $data = $_POST;
 
-        // Check if the user is logged in
         if (!isset($_SESSION['user_id'])) {
             $this->_f3->set('errors', ['comment' => 'You must be logged in to comment.']);
             $this->_f3->set('heroId', $data['hero_id']);
@@ -106,6 +113,9 @@ class Controller
         $this->_f3->reroute('/hero/' . $data['hero_id']);
     }
 
+    /**
+     * Handles user login.
+     */
     public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -129,38 +139,31 @@ class Controller
         }
     }
 
+    /**
+     * Handles user sign up.
+     */
     public function signUp(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $db = $this->_f3->get('DB');
             $data = $_POST;
 
-            // Hash the password before storing it
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
             $userId = $this->userModel->createUser($data['real_name'], $data['email'], $hashedPassword);
-
-            //all image handeling here
 
             $imageFileName = null;
             if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
                 $target_dir = "img/";
                 $target_file = $target_dir . basename($_FILES["image"]["name"]);
-                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-                // image verification
-                $check = getimagesize($_FILES["image"]["tmp_name"]);
-                if ($check !== false) {
-                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                        $imageFileName = basename($_FILES["image"]["name"]);
-                        error_log('Image filename error: ' . $imageFileName);
-                    } else {
-                        echo "Sorry, there was an error uploading your file.";
-                    }
+                // Handle image upload
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                    $imageFileName = basename($_FILES["image"]["name"]);
+                    error_log('Image filename error: ' . $imageFileName);
                 } else {
-                    echo "No Photo";
+                    echo "Sorry, there was an error uploading your file.";
                 }
             }
-
 
             if (isset($data['isHero'])) {
                 $heroData = [
@@ -177,7 +180,6 @@ class Controller
                 $this->heroModel->createHero($heroData);
             }
 
-
             $this->_f3->reroute('/login');
         } else {
             $view = new Template();
@@ -185,19 +187,25 @@ class Controller
         }
     }
 
+    /**
+     * Displays user favorites page.
+     */
     public function favorites(): void
     {
         $view = new Template();
         echo $view->render('views/favorites.html');
     }
 
+    /**
+     * Displays user account details.
+     */
     public function myAccount(): void
     {
         session_start();
 
         if (!isset($_SESSION['user_id'])) {
             $this->_f3->set('SESSION.redirect_message', 'Please sign in first');
-            $this->_f3->reroute('/login'); // should route and make the user log in first with a warning
+            $this->_f3->reroute('/login');
             return;
         }
         $userId = $_SESSION['user_id'];
@@ -215,17 +223,16 @@ class Controller
             $this->_f3->clear('blogPosts');
         }
 
-
         $comments = $this->commentBlogModel->getCommentsByUserId($userId);
         $this->_f3->set('comments', $comments);
-
 
         $view = new Template();
         echo $view->render('views/myAccount.html');
     }
 
-
-
+    /**
+     * Handles adding a blog post.
+     */
     public function addBlog(): void
     {
         $data = $_POST;
@@ -236,9 +243,8 @@ class Controller
         $blog->setHeroPage($data['hero_id']);
         $blog->setUserId($data['hero_id']);
 
-        $userName = $this->userModel->getUserById($blog->getHeroPage())['name'];
-        $blog->setUserName($userName);
-
+        $hero = $this->heroModel->getHeroByUserId($_SESSION['user_id'])['hero_name'];
+        $blog->setUserName($hero);
 
         $blogData = [
             'body' => $blog->getBody(),
@@ -251,21 +257,31 @@ class Controller
         ];
         $this->commentBlogModel->createComment($blogData);
 
-        // Refresh the page
         $this->_f3->reroute('/hero/' . $blog->getHeroPage());
     }
-
-    function rateHeroUp(){
+    /**
+     * Handles rating a hero up.
+     */
+    public function rateHeroUp(): void
+    {
         $heroId = $_POST['hero_id'];
         $this->heroModel->rateHeroUp($heroId);
         $this->_f3->reroute('/hero/' . $heroId);
     }
 
-    function rateHeroDown(){
+    /**
+     * Handles rating a hero down.
+     */
+    public function rateHeroDown(): void
+    {
         $heroId = $_POST['hero_id'];
         $this->heroModel->rateHeroDown($heroId);
         $this->_f3->reroute('/hero/' . $heroId);
     }
+
+    /**
+     * Deletes a comment.
+     */
     public function deleteComment(): void
     {
         $db = $this->_f3->get('DB');
@@ -284,13 +300,16 @@ class Controller
 
         $this->_f3->reroute('/hero/' . $data['hero_id']);
     }
+
+    /**
+     * Updates a comment.
+     */
     public function updateComment(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $commentId = $_POST['comment_id'];
             $newBody = $_POST['comment'];
 
-            // Check if the user is logged in
             if (!isset($_SESSION['user_id'])) {
                 $this->_f3->set('errors', ['comment' => 'You must be logged in to edit a comment.']);
                 $this->_f3->reroute('/hero/' . $_POST['hero_id']);
@@ -308,11 +327,6 @@ class Controller
         }
     }
 
-
 }
-
-
-
-
 
 ?>
