@@ -16,7 +16,7 @@ require_once $path;
 session_start(); // Start the session
 
 $f3 = Base::instance();
-$con = new Controller($f3);
+
 
 try {
     $dbh = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
@@ -27,7 +27,7 @@ try {
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }
-
+$con = new Controller($f3);
 $f3->route('GET /', function($f3) {
     $GLOBALS['con']->home();
 });
