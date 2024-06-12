@@ -41,7 +41,7 @@ class HeroDataLayer
     public function createHero($heroData)
     {
         $stmt = $this->db->prepare("INSERT INTO hero (hero_name, real_name, posRating, numRatings, strength, intellect, energy, speed, powers, image, userId) 
-                                      VALUES (:hero_name, :real_name, 100, 1, :strength, :intellect, :energy, :speed, :powers, :image, :userId)");
+                                      VALUES (:hero_name, :real_name, 1, 1, :strength, :intellect, :energy, :speed, :powers, :image, :userId)");
         $stmt->bindParam(':hero_name', $heroData['hero_name'], PDO::PARAM_STR);
         $stmt->bindParam(':real_name', $heroData['real_name'], PDO::PARAM_STR);
         $stmt->bindParam(':strength', $heroData['strength'], PDO::PARAM_INT);
@@ -63,9 +63,11 @@ class HeroDataLayer
 
     public function rateHeroDown($heroId)
     {
-        $stmt = $this->db->prepare("UPDATE hero SET numRatings = numRatings + 1 WHERE heroId = :heroId");
-        $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
-        $stmt->execute();
+        if($heroId != 5) {
+            $stmt = $this->db->prepare("UPDATE hero SET numRatings = numRatings + 1 WHERE heroId = :heroId");
+            $stmt->bindParam(':heroId', $heroId, PDO::PARAM_INT);
+            $stmt->execute();
+        }
     }
 }
 ?>

@@ -7,7 +7,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once('vendor/autoload.php');
-require_once('controllers/Controller.php');
+//require_once('controllers/Controller.php');
 require_once('model/validate.php');
 
 $path = $_SERVER['DOCUMENT_ROOT'].'/../config.php';

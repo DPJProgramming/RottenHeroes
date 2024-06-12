@@ -87,48 +87,19 @@
 
         </div>
 
-        <!-- News Section -->
-        <div class="col-6 bg-light border">
-            <h2>News</h2>
-            <h4>10-15-24</h4>
-            <p>Homelander rescues a group of school children from a collapsing building. His actions are praised, but some question his motives.<br>
-                Homelander's recent interview where he emphasized the need for stronger enforcement of superhero regulations.<hr>
-            </p>
-            <h4>12-2-24</h4>
-            <p>Homelander uses his laser eyes to disperse a crowd during a protest. The incident sparks controversy and debates about his methods.<br>
-                Critics argue that his actions were excessive and violated civil rights.<br>
-                Supporters claim it was necessary to maintain order.<hr>
-            </p>
-        </div>
-
-        <!-- Blog Section -->
-        <div class="col-6 bg-light border">
-            <h2>Blog</h2>
-            <check if="{{@isHero}}">
-            <form method="post" action="/328/RottenHeroes/blog">
-                <input type="hidden" name="hero_id" value="{{ @heroId }}">
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Post to Blog:</label>
-                    <textarea class="form-control" id="post-blog" name="blog" rows="3" required></textarea>
-                </div>
-                <check if="{{ @errors.comment }}">
-                    <p class="text-danger">{{ @errors.comment }}</p>
-                </check>
-                <button type="submit" class="btn btn-primary">Post</button>
-            </form>
-            </check>
-
-
-            <div id="blog" class="mt-4">
-                <repeat group="{{ @blog }}" value="{{ @blog }}">
-                    <div class="comment mb-3">
-                        <h4>{{ @blog.userName }} <small>{{ @blog.created_at }}</small></h4>
-                        <p>{{ @blog.body }}</p>
-                        <hr>
-                    </div>
-                </repeat>
-            </div>
-        </div>
+<!--        &lt;!&ndash; News Section &ndash;&gt;-->
+<!--        <div class="col-6 bg-light border">-->
+<!--            <h2>News</h2>-->
+<!--            <h4>10-15-24</h4>-->
+<!--            <p>Homelander rescues a group of school children from a collapsing building. His actions are praised, but some question his motives.<br>-->
+<!--                Homelander's recent interview where he emphasized the need for stronger enforcement of superhero regulations.<hr>-->
+<!--            </p>-->
+<!--            <h4>12-2-24</h4>-->
+<!--            <p>Homelander uses his laser eyes to disperse a crowd during a protest. The incident sparks controversy and debates about his methods.<br>-->
+<!--                Critics argue that his actions were excessive and violated civil rights.<br>-->
+<!--                Supporters claim it was necessary to maintain order.<hr>-->
+<!--            </p>-->
+<!--        </div>-->
 
         <!-- Comments and Reviews -->
         <div class="col-6 bg-light border">
@@ -166,6 +137,35 @@
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </check>
+                        <hr>
+                    </div>
+                </repeat>
+            </div>
+        </div>
+
+        <!-- Blog Section -->
+        <div class="col-6 bg-light border">
+            <h2>Blog</h2>
+            <check if="{{@isHero}}">
+                <form method="post" action="/328/RottenHeroes/blog">
+                    <input type="hidden" name="hero_id" value="{{ @heroId }}">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Post to Blog:</label>
+                        <textarea class="form-control" id="post-blog" name="blog" rows="3" required></textarea>
+                    </div>
+                    <check if="{{ @errors.comment }}">
+                        <p class="text-danger">{{ @errors.comment }}</p>
+                    </check>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </check>
+
+
+            <div id="blog" class="mt-4">
+                <repeat group="{{ @blog }}" value="{{ @blog }}">
+                    <div class="comment mb-3">
+                        <h4>{{ @blog.userName }} <small>{{ @blog.created_at }}</small></h4>
+                        <p>{{ @blog.body }}</p>
                         <hr>
                     </div>
                 </repeat>
