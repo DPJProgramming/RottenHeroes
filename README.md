@@ -2,6 +2,7 @@
 Rotten Heroes is a superhero rating website used to provide a space where superhero fans can rate their
 favorite and/or least favorite heroes, along with interact with hero profiles by leaving comments / 
 reviews, and the heroes can post blog posts to update their fans on current statuses and updates.
+https://dpjprogramming.greenriverdev.com/328/RottenHeroes/
 
 ## Authors
 
